@@ -1,0 +1,24 @@
+.appBarLoginButton {
+  margin-right: 10px;
+}
+
+.appBarAboutButton {
+  margin-right: 10px;
+}
+
+.landingPage {
+  margin: 0px;
+  justify-content: center;
+  align-items: center;
+  height: 70vh; /* This ensures the container is centered vertically on the viewport */
+}
+
+.landingPageText {
+  justify-content: center;
+  margin-top: 100px;
+  margin-left: 10px;
+}
+
+.landingButton {
+  margin-left: 20px;
+}

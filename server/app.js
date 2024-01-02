@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var cors = require("cors");
+require("dotenv/config");
+var express = require("express");
+var mongoose_1 = require("mongoose");
+var admin_js_1 = require("./routes/admin.js");
+var user_js_1 = require("./routes/user.js");
+var app = express();
+app.use(cors({ origin: "http://localhost:5173" }));
+app.use(express.json());
+app.use("/admin", admin_js_1.default);
+app.use("/users", user_js_1.default);
+mongoose_1.default.connect(process.env.DATABASE_URL);
+app.listen(3000, function () { return console.log("Server running on port 3000"); });
