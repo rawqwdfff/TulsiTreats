@@ -1,23 +1,14 @@
 import "dotenv/config";
 import * as express from "express";
+import { Request, Response } from "express";
+
 import * as jwt from "jsonwebtoken";
 import { Users, products } from "../db/index.js";
-import authenticateJwt from "../middleware/auth.js";
 
 const router = express.Router();
 
-interface Request {
-  params: {
-    courseId: string;
-  };
-  body: {
-    username: string;
-    password: string;
-  };
-}
-
 // User routes
-router.post("/signup", async (req: Request, res) => {
+router.post("/signup", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const user = await Users.findOne({ username });
   if (user) {
@@ -32,7 +23,7 @@ router.post("/signup", async (req: Request, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.headers;
   const user = await Users.findOne({ username, password });
   if (user) {
@@ -45,37 +36,37 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/products", async (req, res) => {
+router.get("/products", async (req: Request, res: Response) => {
   const availableProducts = await products.find({ InStock: true });
   res.json({ availableProducts });
 });
 
-router.post("/:productID", authenticateJwt, async (req: Request, res) => {
-  const product = await products.findById(req.params.courseId);
-  console.log(product);
-  if (product) {
-    const user = await Users.findOne({ username: req.body.username });
-    if (user) {
-      user.purchasedProducts.push(product._id);
-      await user.save();
-      res.json({ message: "Course purchased successfully" });
-    } else {
-      res.status(403).json({ message: "User not found" });
-    }
-  } else {
-    res.status(404).json({ message: "Course not found" });
-  }
-});
+// router.post("/:productID", authenticateJwt, async (req: authRequest, res:Response) => {
+//   const product = await products.findById(req.params.courseId);
+//   console.log(product);
+//   if (product) {
+//     const user = await Users.findOne({ username: req.body.username });
+//     if (user) {
+//       user.purchasedProducts.push(product._id);
+//       await user.save();
+//       res.json({ message: "Course purchased successfully" });
+//     } else {
+//       res.status(403).json({ message: "User not found" });
+//     }
+//   } else {
+//     res.status(404).json({ message: "Course not found" });
+//   }
+// });
 
-router.get("/purchasedProducts", authenticateJwt, async (req, res) => {
-  const user = await Users.findOne({
-    username: req.body.username,
-  }).populate("purchasedProducts");
-  if (user) {
-    res.json({ purchasedProducts: user.purchasedProducts || [] });
-  } else {
-    res.status(403).json({ message: "User not found" });
-  }
-});
+// router.get("/purchasedProducts", authenticateJwt, async (req:authRequest, res) => {
+//   const user = await Users.findOne({
+//     username: req.body.username,
+//   }).populate("purchasedProducts");
+//   if (user) {
+//     res.json({ purchasedProducts: user.purchasedProducts || [] });
+//   } else {
+//     res.status(403).json({ message: "User not found" });
+//   }
+// });
 
 export default router;

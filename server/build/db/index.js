@@ -1,17 +1,20 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.products = exports.admins = exports.Users = void 0;
-var mongoose_1 = require("mongoose");
-var userSchema = new mongoose_1.default.Schema({
+const mongoose_1 = __importDefault(require("mongoose"));
+const userSchema = new mongoose_1.default.Schema({
     username: { type: String },
     password: String,
     purchasedProducts: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "Product" }],
 });
-var adminSchema = new mongoose_1.default.Schema({
+const adminSchema = new mongoose_1.default.Schema({
     username: String,
     password: String,
 });
-var productSchema = new mongoose_1.default.Schema({
+const productSchema = new mongoose_1.default.Schema({
     title: String,
     description: String,
     price: Number,
@@ -19,9 +22,9 @@ var productSchema = new mongoose_1.default.Schema({
     InStock: Boolean,
 });
 // Define mongoose models
-var Users = mongoose_1.default.model("User", userSchema);
+const Users = mongoose_1.default.model("User", userSchema);
 exports.Users = Users;
-var admins = mongoose_1.default.model("Admin", adminSchema);
+const admins = mongoose_1.default.model("Admin", adminSchema);
 exports.admins = admins;
-var products = mongoose_1.default.model("Product", productSchema);
+const products = mongoose_1.default.model("Product", productSchema);
 exports.products = products;

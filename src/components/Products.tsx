@@ -1,15 +1,24 @@
 import { Button, Card, Typography } from "@mui/material";
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import productState from "../store/atoms/productState";
 
-Product.propTypes = {
-  product: PropTypes.any.isRequired,
-};
+interface productType {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  imageLink: string;
+  InStock: boolean;
+}
 
-function Product({ product }) {
+interface productComponentType {
+  key: string;
+  product: productType;
+}
+
+const Product: React.FC<productComponentType> = (productComponent) => {
   const navigate = useNavigate();
 
   return (
@@ -22,18 +31,21 @@ function Product({ product }) {
       }}
     >
       <Typography textAlign={"center"} variant="h5">
-        {product.title}
+        {productComponent.product.title}
       </Typography>
       <Typography textAlign={"center"} variant="subtitle1">
-        {product.description}
+        {productComponent.product.description}
       </Typography>
-      <img src={product.imageLink} style={{ width: 300 }}></img>
+      <img
+        src={productComponent.product.imageLink}
+        style={{ width: 300 }}
+      ></img>
       <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
         <Button
           variant="contained"
           size="large"
           onClick={() => {
-            navigate("/course/" + product._id);
+            navigate("/course/" + productComponent.product._id);
           }}
         >
           Wishlist
@@ -42,7 +54,7 @@ function Product({ product }) {
           variant="contained"
           size="large"
           onClick={() => {
-            navigate("/course/" + product._id);
+            navigate("/course/" + productComponent.product._id);
           }}
           style={{ marginLeft: 30 }}
         >
@@ -51,9 +63,9 @@ function Product({ product }) {
       </div>
     </Card>
   );
-}
+};
 
-function Products() {
+const Products: React.FC = () => {
   //const [Products, setProducts] = useState({});
 
   const [ProductState, setProductState] = useRecoilState(productState);
@@ -76,7 +88,7 @@ function Products() {
   if (ProductState === null) {
     return (
       <div>
-        <p>WAIT MACHAA!</p>
+        <p>WAIT!</p>
       </div>
     );
   } else {
@@ -89,13 +101,13 @@ function Products() {
             justifyContent: "center",
           }}
         >
-          {ProductState.map((product) => {
+          {ProductState.map((product: productType) => {
             return <Product key={product._id} product={product} />;
           })}
         </div>
       </div>
     );
   }
-}
+};
 
 export default Products;

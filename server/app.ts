@@ -1,7 +1,7 @@
-import * as cors from "cors";
-import "dotenv/config";
-import * as express from "express";
+//import "dotenv/config";
 import mongoose from "mongoose";
+import express = require("express");
+import cors = require("cors");
 
 import adminRouter from "./routes/admin.js";
 import userRouter from "./routes/user.js";
